@@ -44,38 +44,35 @@ fi
 INPUT=""
 INPUT_COUNTER=0
 RANDOM_NUMBER=$((1 + RANDOM % 1000))
-#echo $RANDOM_NUMBER
+echo $RANDOM_NUMBER
 
-while [[ $INPUT != $RANDOM_NUMBER ]]
+echo "Guess the secret number between 1 and 1000:"
+
+while read INPUT
 do
-  echo "Guess the secret number between 1 and 1000:"
-  read INPUT
-
-  # Case to filter integer input
-  case $INPUT in
-      ''|*[!0-9]*)
-          echo "That is not an integer, guess again:"
-          ;;
-      *)
-          ((INPUT_COUNTER++))
-          if [[ $INPUT == $RANDOM_NUMBER ]]
-            then
-            # If input is the correct number
-            echo "You guessed it in $INPUT_COUNTER tries. The secret number was $RANDOM_NUMBER. Nice job!"
-            else
-              if [[ $INPUT > $RANDOM_NUMBER ]]
-              then
-                # If input is bigger than correct number
-                echo "It's lower than that, guess again:"
-              else
-                # If input is smaller than correct number
-                echo "It's higher than that, guess again:"
-              fi
-            fi
-          ;;
-  esac
+  # Check if the input is an integer
+  if [[ ! $INPUT =~ ^[0-9]+$ ]]
+  then
+    echo "That is not an integer, guess again:"
+  else
+    ((INPUT_COUNTER++))
+    if [[ $INPUT == $RANDOM_NUMBER ]]
+      then
+      # If input is the correct number
+      echo "You guessed it in $INPUT_COUNTER tries. The secret number was $RANDOM_NUMBER. Nice job!"
+      break
+      else
+        if [[ $INPUT > $RANDOM_NUMBER ]]
+        then
+          # If input is bigger than correct number
+          echo "It's lower than that, guess again:"
+        else
+          # If input is smaller than correct number
+          echo "It's higher than that, guess again:"
+        fi
+    fi
+  fi
 done
-
 
 ####################   GUESSING GAME ALGO   ####################
 if $NEW_USER
